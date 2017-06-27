@@ -1,0 +1,86 @@
+<html>
+<head>
+  <meta charset = "uft-8">
+  <title>
+  Load more
+  </title>
+        <style>
+      ul,li{
+      margin: 0;
+      padding: 0
+    }
+    #ct li{
+      list-style:none;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 10px;
+      cursor:pointer;
+    }
+    #load-more{
+      display: block;
+      margin: 10px auto;
+      text-align: center;
+      cursor: pointer;
+    }
+    #load-more img{
+      width: 40px;
+      height: 40px;
+    }
+    .btn{
+      display: inline-block;
+      height: 40px;
+      line-height: 40px;
+      width: 80px;
+      border: 1px solid #E27272;
+      border-radius: 3px;
+      text-align: center;
+      text-decoration: none;
+      color: #E27272;
+    }
+    .btn:hover{
+      background: green;
+      color: #fff;
+    }
+      </style>
+</head>
+
+<body>
+    <ul id="ct">
+    </ul>
+    <a id="load-more" class="btn" href="javascript:(0)">
+      加载更多
+    </a>
+    <p class = 'ps'></p>
+</body>
+
+<script src="https://cdn.moefont.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+    var pageIndex = 0;
+    $('#load-more').on('click', function(){
+        $.get('/getNews',{page:pageIndex}).done(function(ret){
+              pageIndex++;
+              appendHtml(ret);
+              console.log(pageIndex)
+        }).fail(function(){
+            alert('系统异常');
+        })
+    });
+
+    function appendHtml(news){
+        console.log('phase2')
+        if(news.length === 0){
+            $('#load-more').remove();
+            $('.ps').text('没有数据了');
+            return;
+        }else{
+            console.log('phase3')
+            var html = '';
+            $.each(news, function(){
+                html = '<li>' + this.title + '</li>'
+                $('ul').append(html);
+                console.log('phase4')
+            })
+        }
+    }
+</script>
+</html>
